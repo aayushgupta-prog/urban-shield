@@ -1,0 +1,1245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UrbanShield AI - Safe Route Intelligence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #12121a;
+      --bg-card: rgba(255, 255, 255, 0.03);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --text-primary: #ffffff;
+      --text-secondary: rgba(255, 255, 255, 0.65);
+      --text-muted: rgba(255, 255, 255, 0.42);
+      --accent-blue: #3b82f6;
+      --accent-green: #10b981;
+      --accent-purple: #8b5cf6;
+      --accent-amber: #f59e0b;
+      --glow-blue: rgba(59, 130, 246, 0.28);
+      --glow-green: rgba(16, 185, 129, 0.22);
+      --danger: #ef4444;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .bg-gradient {
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(59, 130, 246, 0.15), transparent),
+        radial-gradient(ellipse 60% 40% at 80% 60%, rgba(139, 92, 246, 0.10), transparent),
+        radial-gradient(ellipse 50% 30% at 20% 80%, rgba(16, 185, 129, 0.08), transparent);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .grid-overlay {
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    header {
+      padding: 24px 0;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .header-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-icon {
+      width: 42px;
+      height: 42px;
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 10px 30px rgba(59, 130, 246, 0.20);
+    }
+
+    .logo-icon svg {
+      width: 24px;
+      height: 24px;
+      color: white;
+    }
+
+    .logo-text {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    .logo-text span {
+      color: var(--accent-blue);
+    }
+
+    .header-badge {
+      padding: 6px 14px;
+      background: rgba(16, 185, 129, 0.10);
+      border: 1px solid rgba(16, 185, 129, 0.30);
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--accent-green);
+      white-space: nowrap;
+    }
+
+    .hero {
+      padding: 80px 0 56px;
+      text-align: center;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 999px;
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+      animation: fadeInUp 0.6s ease;
+      backdrop-filter: blur(12px);
+    }
+
+    .hero-badge-dot {
+      width: 7px;
+      height: 7px;
+      background: var(--accent-green);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    .hero h1 {
+      font-size: clamp(40px, 8vw, 72px);
+      font-weight: 800;
+      letter-spacing: -2px;
+      line-height: 1.05;
+      margin-bottom: 18px;
+      animation: fadeInUp 0.6s ease 0.1s backwards;
+    }
+
+    .hero h1 span {
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple), var(--accent-green));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-subtitle {
+      font-size: 20px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+      animation: fadeInUp 0.6s ease 0.2s backwards;
+    }
+
+    .hero-description {
+      font-size: 16px;
+      color: var(--text-muted);
+      max-width: 620px;
+      margin: 0 auto;
+      line-height: 1.7;
+      animation: fadeInUp 0.6s ease 0.3s backwards;
+    }
+
+    .input-panel {
+      max-width: 760px;
+      margin: 0 auto 56px;
+      padding: 30px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 22px;
+      backdrop-filter: blur(20px);
+      animation: fadeInUp 0.6s ease 0.4s backwards;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.22);
+    }
+
+    .input-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .input-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+    }
+
+    .select-wrapper {
+      position: relative;
+    }
+
+    .select-wrapper::after {
+      content: '';
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 0;
+      height: 0;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 5px solid var(--text-muted);
+      pointer-events: none;
+    }
+
+    select {
+      width: 100%;
+      padding: 14px 40px 14px 16px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      color: var(--text-primary);
+      font-family: inherit;
+      font-size: 15px;
+      cursor: pointer;
+      appearance: none;
+      transition: all 0.2s ease;
+    }
+
+    select:hover {
+      border-color: rgba(255, 255, 255, 0.16);
+    }
+
+    select:focus {
+      outline: none;
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 0 3px var(--glow-blue);
+    }
+
+    .analyze-btn {
+      width: 100%;
+      padding: 16px 22px;
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+      border: none;
+      border-radius: 14px;
+      color: white;
+      font-family: inherit;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.28s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      letter-spacing: 0.2px;
+    }
+
+    .analyze-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 36px var(--glow-blue);
+    }
+
+    .analyze-btn:active:not(:disabled) {
+      transform: translateY(0);
+    }
+
+    .analyze-btn:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+
+    .analyze-btn svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .loading-container {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 20px;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .loading-container.active {
+      display: flex;
+    }
+
+    .loading-spinner {
+      width: 48px;
+      height: 48px;
+      border: 3px solid var(--border-color);
+      border-top-color: var(--accent-blue);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 20px;
+    }
+
+    .loading-text {
+      font-size: 16px;
+      color: var(--text-secondary);
+      animation: pulse 1.5s ease infinite;
+    }
+
+    .loading-dots::after {
+      content: '';
+      animation: dots 1.5s steps(4, end) infinite;
+    }
+
+    .error-message {
+      display: none;
+      text-align: center;
+      padding: 22px;
+      background: rgba(239, 68, 68, 0.10);
+      border: 1px solid rgba(239, 68, 68, 0.28);
+      border-radius: 14px;
+      margin: 20px auto;
+      max-width: 760px;
+      backdrop-filter: blur(14px);
+    }
+
+    .error-message.active {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .error-message p {
+      color: #f87171;
+      font-size: 15px;
+    }
+
+    .results-section {
+      display: none;
+      animation: fadeInUp 0.5s ease;
+      margin-bottom: 42px;
+    }
+
+    .results-section.active {
+      display: block;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .section-header h2 {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .section-header p {
+      color: var(--text-secondary);
+      font-size: 15px;
+    }
+
+    .same-route-message {
+      display: none;
+      text-align: center;
+      padding: 20px;
+      background: rgba(59, 130, 246, 0.10);
+      border: 1px solid rgba(59, 130, 246, 0.24);
+      border-radius: 14px;
+      margin-bottom: 24px;
+    }
+
+    .same-route-message.active {
+      display: block;
+    }
+
+    .same-route-message p {
+      color: var(--text-secondary);
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    .same-route-message strong {
+      color: var(--accent-blue);
+    }
+
+    .routes-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+      margin-bottom: 28px;
+    }
+
+    .route-card {
+      padding: 28px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 18px;
+      backdrop-filter: blur(20px);
+      transition: all 0.3s ease;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.18);
+    }
+
+    .route-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(255, 255, 255, 0.12);
+    }
+
+    .route-card.recommended {
+      border-color: rgba(16, 185, 129, 0.38);
+      box-shadow: 0 0 40px rgba(16, 185, 129, 0.10);
+    }
+
+    .route-card.recommended:hover {
+      box-shadow: 0 0 50px rgba(16, 185, 129, 0.14);
+    }
+
+    .route-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .route-title {
+      font-size: 19px;
+      font-weight: 700;
+    }
+
+    .route-badge {
+      padding: 5px 10px;
+      background: rgba(59, 130, 246, 0.14);
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--accent-blue);
+      white-space: nowrap;
+    }
+
+    .route-card.recommended .route-badge {
+      background: rgba(16, 185, 129, 0.14);
+      color: var(--accent-green);
+    }
+
+    .route-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .stat {
+      padding: 16px;
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+      margin-bottom: 6px;
+    }
+
+    .stat-value {
+      font-size: 21px;
+      font-weight: 700;
+      line-height: 1.1;
+    }
+
+    .stat-value.time {
+      color: var(--accent-blue);
+    }
+
+    .stat-value.risk {
+      color: var(--accent-purple);
+    }
+
+    .stat-value.risk.low {
+      color: var(--accent-green);
+    }
+
+    .stat-value.distance {
+      color: var(--accent-amber);
+    }
+
+    .route-path {
+      padding: 16px;
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .route-path-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+      margin-bottom: 10px;
+    }
+
+    .route-path-nodes {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .path-node {
+      padding: 6px 12px;
+      background: rgba(59, 130, 246, 0.10);
+      border: 1px solid rgba(59, 130, 246, 0.22);
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    .route-card.recommended .path-node {
+      background: rgba(16, 185, 129, 0.10);
+      border-color: rgba(16, 185, 129, 0.22);
+    }
+
+    .path-arrow {
+      color: var(--text-muted);
+      font-size: 12px;
+    }
+
+    .ai-explanation {
+      padding: 28px;
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.05), rgba(59, 130, 246, 0.05));
+      border: 1px solid rgba(139, 92, 246, 0.22);
+      border-radius: 18px;
+      margin-bottom: 48px;
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(14px);
+    }
+
+    .ai-explanation::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent-purple), var(--accent-blue), var(--accent-green));
+    }
+
+    .ai-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .ai-icon {
+      width: 38px;
+      height: 38px;
+      background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
+      border-radius: 11px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .ai-icon svg {
+      width: 20px;
+      height: 20px;
+      color: white;
+    }
+
+    .ai-title {
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .ai-text {
+      font-size: 15px;
+      line-height: 1.75;
+      color: var(--text-secondary);
+    }
+
+    .meta-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 48px;
+    }
+
+    .meta-card {
+      padding: 18px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      text-align: center;
+      backdrop-filter: blur(14px);
+    }
+
+    .meta-card-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .meta-card-value {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .tech-section {
+      padding: 12px 0 80px;
+    }
+
+    .tech-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .tech-header h3 {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .tech-header p {
+      color: var(--text-secondary);
+      font-size: 14px;
+    }
+
+    .tech-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .tech-card {
+      padding: 24px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 15px;
+      text-align: center;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(12px);
+    }
+
+    .tech-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(255, 255, 255, 0.12);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.28);
+    }
+
+    .tech-icon {
+      width: 48px;
+      height: 48px;
+      margin: 0 auto 16px;
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.10), rgba(139, 92, 246, 0.10));
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .tech-icon svg {
+      width: 24px;
+      height: 24px;
+      color: var(--accent-blue);
+    }
+
+    .tech-card:nth-child(2) .tech-icon svg {
+      color: var(--accent-purple);
+    }
+
+    .tech-card:nth-child(3) .tech-icon svg {
+      color: var(--accent-green);
+    }
+
+    .tech-card:nth-child(4) .tech-icon svg {
+      color: var(--accent-amber);
+    }
+
+    .tech-name {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .tech-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    footer {
+      padding: 24px 0 32px;
+      border-top: 1px solid var(--border-color);
+      text-align: center;
+    }
+
+    footer p {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    footer span {
+      color: var(--accent-blue);
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes dots {
+      0%, 20% { content: ''; }
+      40% { content: '.'; }
+      60% { content: '..'; }
+      80%, 100% { content: '...'; }
+    }
+
+    @media (max-width: 900px) {
+      .routes-grid,
+      .meta-strip,
+      .tech-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .route-stats {
+        grid-template-columns: 1fr 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .input-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .header-content {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .hero {
+        padding-top: 60px;
+      }
+
+      .input-panel {
+        padding: 22px;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .container {
+        padding: 0 16px;
+      }
+
+      .route-stats {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-subtitle {
+        font-size: 18px;
+      }
+
+      .hero-description {
+        font-size: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-gradient"></div>
+  <div class="grid-overlay"></div>
+
+  <header>
+    <div class="container">
+      <div class="header-content">
+        <div class="logo">
+          <div class="logo-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/>
+              <circle cx="12" cy="10" r="3"/>
+            </svg>
+          </div>
+          <div class="logo-text">Urban<span>Shield</span></div>
+        </div>
+        <div class="header-badge">AI-Powered Routing Engine</div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <div class="hero-badge">
+          <span class="hero-badge-dot"></span>
+          Safe Route Intelligence Platform
+        </div>
+        <h1>Urban<span>Shield</span> AI</h1>
+        <p class="hero-subtitle">AI-powered safe route intelligence for urban mobility</p>
+        <p class="hero-description">
+          Optimize your journey not just for speed, but for safety. UrbanShield compares time-optimal and risk-optimal routes using graph-based pathfinding and contextual risk scoring.
+        </p>
+      </div>
+    </section>
+
+    <section class="container">
+      <div class="input-panel">
+        <div class="input-grid">
+          <div class="input-group">
+            <label class="input-label" for="source">Source</label>
+            <div class="select-wrapper">
+              <select id="source">
+                <option value="">Select origin</option>
+                <option value="Central_Station">Central Station</option>
+                <option value="MG_Road">MG Road</option>
+                <option value="Cubbon_Park">Cubbon Park</option>
+                <option value="Indiranagar">Indiranagar</option>
+                <option value="Koramangala">Koramangala</option>
+                <option value="HSR_Layout">HSR Layout</option>
+                <option value="Whitefield">Whitefield</option>
+                <option value="Electronic_City">Electronic City</option>
+                <option value="Silk_Board">Silk Board</option>
+                <option value="BTM_Layout">BTM Layout</option>
+                <option value="Marathahalli">Marathahalli</option>
+                <option value="Domlur">Domlur</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label class="input-label" for="destination">Destination</label>
+            <div class="select-wrapper">
+              <select id="destination">
+                <option value="">Select destination</option>
+                <option value="Central_Station">Central Station</option>
+                <option value="MG_Road">MG Road</option>
+                <option value="Cubbon_Park">Cubbon Park</option>
+                <option value="Indiranagar">Indiranagar</option>
+                <option value="Koramangala">Koramangala</option>
+                <option value="HSR_Layout">HSR Layout</option>
+                <option value="Whitefield">Whitefield</option>
+                <option value="Electronic_City">Electronic City</option>
+                <option value="Silk_Board">Silk Board</option>
+                <option value="BTM_Layout">BTM Layout</option>
+                <option value="Marathahalli">Marathahalli</option>
+                <option value="Domlur">Domlur</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label class="input-label" for="timeOfDay">Time of Day</label>
+            <div class="select-wrapper">
+              <select id="timeOfDay">
+                <option value="auto">Auto Detect</option>
+                <option value="day">Day</option>
+                <option value="night">Night</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <button class="analyze-btn" id="analyzeBtn" onclick="analyzeRoute()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 16v-4"/>
+            <path d="M12 8h.01"/>
+          </svg>
+          Analyze Route
+        </button>
+      </div>
+
+      <div class="loading-container" id="loadingContainer">
+        <div class="loading-spinner"></div>
+        <p class="loading-text">Analyzing urban mobility patterns<span class="loading-dots"></span></p>
+      </div>
+
+      <div class="error-message" id="errorMessage">
+        <p id="errorText">An error occurred. Please try again.</p>
+      </div>
+
+      <div class="results-section" id="resultsSection">
+        <div class="section-header">
+          <h2>Route Analysis Results</h2>
+          <p>AI-optimized routes based on safety and efficiency metrics</p>
+        </div>
+
+        <div class="same-route-message" id="sameRouteMessage">
+          <p><strong>Great news!</strong> The fastest route is also the safest route for this journey.</p>
+        </div>
+
+        <div class="routes-grid">
+          <div class="route-card" id="fastestRouteCard">
+            <div class="route-header">
+              <span class="route-title">Fastest Route</span>
+              <span class="route-badge">Speed Optimized</span>
+            </div>
+
+            <div class="route-stats">
+              <div class="stat">
+                <div class="stat-label">Total Time</div>
+                <div class="stat-value time" id="fastestTime">--</div>
+              </div>
+              <div class="stat">
+                <div class="stat-label">Risk Score</div>
+                <div class="stat-value risk" id="fastestRisk">--</div>
+              </div>
+              <div class="stat">
+                <div class="stat-label">Distance</div>
+                <div class="stat-value distance" id="fastestDistance">--</div>
+              </div>
+            </div>
+
+            <div class="route-path">
+              <div class="route-path-label">Route Path</div>
+              <div class="route-path-nodes" id="fastestPath"></div>
+            </div>
+          </div>
+
+          <div class="route-card recommended" id="safestRouteCard">
+            <div class="route-header">
+              <span class="route-title">Safest Route</span>
+              <span class="route-badge">Recommended</span>
+            </div>
+
+            <div class="route-stats">
+              <div class="stat">
+                <div class="stat-label">Total Time</div>
+                <div class="stat-value time" id="safestTime">--</div>
+              </div>
+              <div class="stat">
+                <div class="stat-label">Risk Score</div>
+                <div class="stat-value risk low" id="safestRisk">--</div>
+              </div>
+              <div class="stat">
+                <div class="stat-label">Distance</div>
+                <div class="stat-value distance" id="safestDistance">--</div>
+              </div>
+            </div>
+
+            <div class="route-path">
+              <div class="route-path-label">Route Path</div>
+              <div class="route-path-nodes" id="safestPath"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="ai-explanation">
+          <div class="ai-header">
+            <div class="ai-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2z"/>
+                <circle cx="7.5" cy="14.5" r="1.5"/>
+                <circle cx="16.5" cy="14.5" r="1.5"/>
+              </svg>
+            </div>
+            <span class="ai-title">AI Recommendation Analysis</span>
+          </div>
+          <p class="ai-text" id="aiExplanation">Loading AI analysis...</p>
+        </div>
+
+        <div class="meta-strip">
+          <div class="meta-card">
+            <div class="meta-card-label">Algorithm</div>
+            <div class="meta-card-value" id="metaAlgorithm">--</div>
+          </div>
+          <div class="meta-card">
+            <div class="meta-card-label">Graph Nodes</div>
+            <div class="meta-card-value" id="metaNodes">--</div>
+          </div>
+          <div class="meta-card">
+            <div class="meta-card-label">Graph Edges</div>
+            <div class="meta-card-value" id="metaEdges">--</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="tech-section">
+      <div class="container">
+        <div class="tech-header">
+          <h3>Technology Stack</h3>
+          <p>Powered by advanced algorithms and real-time risk-aware route analysis</p>
+        </div>
+
+        <div class="tech-grid">
+          <div class="tech-card">
+            <div class="tech-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="3"/>
+                <circle cx="19" cy="5" r="2"/>
+                <circle cx="5" cy="19" r="2"/>
+                <path d="M10.4 21.9a10 10 0 0 0 9.941-15.416"/>
+                <path d="M13.5 2.1a10 10 0 0 0-9.841 15.416"/>
+              </svg>
+            </div>
+            <div class="tech-name">Graph-Based Routing</div>
+            <div class="tech-desc">Directed road network modeling for route optimization</div>
+          </div>
+
+          <div class="tech-card">
+            <div class="tech-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 20V10"/>
+                <path d="M18 20V4"/>
+                <path d="M6 20v-4"/>
+              </svg>
+            </div>
+            <div class="tech-name">Dynamic Risk Scoring</div>
+            <div class="tech-desc">Lighting, crowd, congestion, and incident-aware routing</div>
+          </div>
+
+          <div class="tech-card">
+            <div class="tech-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12,6 12,12 16,14"/>
+              </svg>
+            </div>
+            <div class="tech-name">Time-Aware Intelligence</div>
+            <div class="tech-desc">Night/day risk weighting for contextual recommendation</div>
+          </div>
+
+          <div class="tech-card">
+            <div class="tech-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+              </svg>
+            </div>
+            <div class="tech-name">Dijkstra Optimization</div>
+            <div class="tech-desc">Fastest-path and safest-path comparison engine</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>Built with <span>♥</span> for Urban Safety • UrbanShield AI</p>
+    </div>
+  </footer>
+
+  <script>
+    const nodeLabels = {
+      "Central_Station": "Central Station",
+      "MG_Road": "MG Road",
+      "Cubbon_Park": "Cubbon Park",
+      "Indiranagar": "Indiranagar",
+      "Koramangala": "Koramangala",
+      "HSR_Layout": "HSR Layout",
+      "Whitefield": "Whitefield",
+      "Electronic_City": "Electronic City",
+      "Silk_Board": "Silk Board",
+      "BTM_Layout": "BTM Layout",
+      "Marathahalli": "Marathahalli",
+      "Domlur": "Domlur"
+    };
+
+    function formatNodeName(node) {
+      return nodeLabels[node] || String(node).replace(/_/g, " ");
+    }
+
+    function renderPath(containerId, path) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = "";
+
+      path.forEach((node, index) => {
+        const nodeSpan = document.createElement("span");
+        nodeSpan.className = "path-node";
+        nodeSpan.textContent = formatNodeName(node);
+        container.appendChild(nodeSpan);
+
+        if (index < path.length - 1) {
+          const arrow = document.createElement("span");
+          arrow.className = "path-arrow";
+          arrow.textContent = "→";
+          container.appendChild(arrow);
+        }
+      });
+    }
+
+    function showLoading() {
+      document.getElementById("loadingContainer").classList.add("active");
+      document.getElementById("resultsSection").classList.remove("active");
+      document.getElementById("errorMessage").classList.remove("active");
+      document.getElementById("analyzeBtn").disabled = true;
+    }
+
+    function hideLoading() {
+      document.getElementById("loadingContainer").classList.remove("active");
+      document.getElementById("analyzeBtn").disabled = false;
+    }
+
+    function showError(message) {
+      hideLoading();
+      document.getElementById("errorText").textContent = message;
+      document.getElementById("errorMessage").classList.add("active");
+    }
+
+    function showResults(data) {
+      hideLoading();
+
+      const resultsSection = document.getElementById("resultsSection");
+      resultsSection.classList.add("active");
+      document.getElementById("errorMessage").classList.remove("active");
+
+      const sameRouteMessage = document.getElementById("sameRouteMessage");
+      if (data.routes_are_identical) {
+        sameRouteMessage.classList.add("active");
+      } else {
+        sameRouteMessage.classList.remove("active");
+      }
+
+      document.getElementById("fastestTime").textContent = `${data.fastest_route.total_travel_time} min`;
+      document.getElementById("fastestRisk").textContent = Number(data.fastest_route.total_risk_score).toFixed(2);
+      document.getElementById("fastestDistance").textContent = `${Number(data.fastest_route.total_distance_km).toFixed(1)} km`;
+      renderPath("fastestPath", data.fastest_route.nodes);
+
+      document.getElementById("safestTime").textContent = `${data.safest_route.total_travel_time} min`;
+      document.getElementById("safestRisk").textContent = Number(data.safest_route.total_risk_score).toFixed(2);
+      document.getElementById("safestDistance").textContent = `${Number(data.safest_route.total_distance_km).toFixed(1)} km`;
+      renderPath("safestPath", data.safest_route.nodes);
+
+      document.getElementById("aiExplanation").textContent =
+        data.ai_explanation || "No additional explanation available.";
+
+      document.getElementById("metaAlgorithm").textContent =
+        data.meta?.algorithm || "Dijkstra";
+      document.getElementById("metaNodes").textContent =
+        data.meta?.nodes_in_graph ?? "--";
+      document.getElementById("metaEdges").textContent =
+        data.meta?.edges_in_graph ?? "--";
+
+      resultsSection.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    async function analyzeRoute() {
+      const source = document.getElementById("source").value;
+      const destination = document.getElementById("destination").value;
+      const timeOfDay = document.getElementById("timeOfDay").value;
+
+      if (!source) {
+        showError("Please select a source location.");
+        return;
+      }
+
+      if (!destination) {
+        showError("Please select a destination.");
+        return;
+      }
+
+      if (source === destination) {
+        showError("Source and destination cannot be the same.");
+        return;
+      }
+
+      showLoading();
+
+      try {
+        const response = await fetch("http://127.0.0.1:5000/recommend-route", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            source: source,
+            target: destination,
+            time_of_day: timeOfDay
+          })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || data.error) {
+          throw new Error(data.error || `Server error: ${response.status}`);
+        }
+
+        showResults(data);
+      } catch (error) {
+        console.error("Error:", error);
+        if (
+          error.message.includes("Failed to fetch") ||
+          error.message.includes("NetworkError")
+        ) {
+          showError("Unable to connect to the server. Please ensure the backend is running on http://127.0.0.1:5000");
+        } else {
+          showError(`Error: ${error.message}`);
+        }
+      }
+    }
+  </script>
+</body>
+</html>

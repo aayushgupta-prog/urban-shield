@@ -1,0 +1,298 @@
+{
+  "nodes": [
+    {
+      "id": "Central_Station",
+      "label": "Central Station",
+      "lat": 12.9716,
+      "lng": 77.5946
+    },
+    {
+      "id": "MG_Road",
+      "label": "MG Road",
+      "lat": 12.9754,
+      "lng": 77.6069
+    },
+    {
+      "id": "Cubbon_Park",
+      "label": "Cubbon Park",
+      "lat": 12.9763,
+      "lng": 77.5929
+    },
+    {
+      "id": "Indiranagar",
+      "label": "Indiranagar",
+      "lat": 12.9784,
+      "lng": 77.6408
+    },
+    {
+      "id": "Koramangala",
+      "label": "Koramangala",
+      "lat": 12.9352,
+      "lng": 77.6245
+    },
+    {
+      "id": "HSR_Layout",
+      "label": "HSR Layout",
+      "lat": 12.9116,
+      "lng": 77.6474
+    },
+    {
+      "id": "Whitefield",
+      "label": "Whitefield",
+      "lat": 12.9698,
+      "lng": 77.7499
+    },
+    {
+      "id": "Electronic_City",
+      "label": "Electronic City",
+      "lat": 12.8456,
+      "lng": 77.6603
+    },
+    {
+      "id": "Silk_Board",
+      "label": "Silk Board",
+      "lat": 12.9175,
+      "lng": 77.6228
+    },
+    {
+      "id": "BTM_Layout",
+      "label": "BTM Layout",
+      "lat": 12.9166,
+      "lng": 77.6101
+    },
+    {
+      "id": "Marathahalli",
+      "label": "Marathahalli",
+      "lat": 12.9591,
+      "lng": 77.6972
+    },
+    {
+      "id": "Domlur",
+      "label": "Domlur",
+      "lat": 12.9609,
+      "lng": 77.6387
+    }
+  ],
+  "edges": [
+    {
+      "from": "Central_Station",
+      "to": "Cubbon_Park",
+      "travel_time": 4,
+      "distance": 1.2,
+      "lighting_score": 9,
+      "crowd_density": 7,
+      "incident_history": 1,
+      "congestion_level": 5,
+      "road_name": "Raj Bhavan Road"
+    },
+    {
+      "from": "Central_Station",
+      "to": "MG_Road",
+      "travel_time": 7,
+      "distance": 2.1,
+      "lighting_score": 10,
+      "crowd_density": 9,
+      "incident_history": 2,
+      "congestion_level": 8,
+      "road_name": "Brigade Road"
+    },
+    {
+      "from": "Cubbon_Park",
+      "to": "MG_Road",
+      "travel_time": 5,
+      "distance": 1.5,
+      "lighting_score": 8,
+      "crowd_density": 6,
+      "incident_history": 1,
+      "congestion_level": 4,
+      "road_name": "Cubbon Road"
+    },
+    {
+      "from": "MG_Road",
+      "to": "Indiranagar",
+      "travel_time": 12,
+      "distance": 3.8,
+      "lighting_score": 9,
+      "crowd_density": 8,
+      "incident_history": 3,
+      "congestion_level": 7,
+      "road_name": "Old Airport Road"
+    },
+    {
+      "from": "MG_Road",
+      "to": "Domlur",
+      "travel_time": 8,
+      "distance": 2.5,
+      "lighting_score": 7,
+      "crowd_density": 5,
+      "incident_history": 4,
+      "congestion_level": 6,
+      "road_name": "Domlur Flyover"
+    },
+    {
+      "from": "Domlur",
+      "to": "Indiranagar",
+      "travel_time": 6,
+      "distance": 1.8,
+      "lighting_score": 8,
+      "crowd_density": 6,
+      "incident_history": 2,
+      "congestion_level": 4,
+      "road_name": "Indiranagar 100ft Road"
+    },
+    {
+      "from": "Domlur",
+      "to": "Marathahalli",
+      "travel_time": 18,
+      "distance": 5.5,
+      "lighting_score": 6,
+      "crowd_density": 7,
+      "incident_history": 5,
+      "congestion_level": 8,
+      "road_name": "HAL Airport Road"
+    },
+    {
+      "from": "Indiranagar",
+      "to": "Marathahalli",
+      "travel_time": 22,
+      "distance": 7.2,
+      "lighting_score": 7,
+      "crowd_density": 6,
+      "incident_history": 3,
+      "congestion_level": 7,
+      "road_name": "Sarjapur Outer Ring Road"
+    },
+    {
+      "from": "Cubbon_Park",
+      "to": "Koramangala",
+      "travel_time": 14,
+      "distance": 4.3,
+      "lighting_score": 5,
+      "crowd_density": 4,
+      "incident_history": 7,
+      "congestion_level": 6,
+      "road_name": "Richmond Road"
+    },
+    {
+      "from": "MG_Road",
+      "to": "Koramangala",
+      "travel_time": 16,
+      "distance": 5.1,
+      "lighting_score": 8,
+      "crowd_density": 7,
+      "incident_history": 3,
+      "congestion_level": 7,
+      "road_name": "Hosur Road"
+    },
+    {
+      "from": "Koramangala",
+      "to": "BTM_Layout",
+      "travel_time": 10,
+      "distance": 3,
+      "lighting_score": 7,
+      "crowd_density": 6,
+      "incident_history": 2,
+      "congestion_level": 5,
+      "road_name": "80 Feet Road"
+    },
+    {
+      "from": "Koramangala",
+      "to": "Silk_Board",
+      "travel_time": 9,
+      "distance": 2.8,
+      "lighting_score": 8,
+      "crowd_density": 8,
+      "incident_history": 4,
+      "congestion_level": 9,
+      "road_name": "Silk Board Junction"
+    },
+    {
+      "from": "BTM_Layout",
+      "to": "Silk_Board",
+      "travel_time": 7,
+      "distance": 2.2,
+      "lighting_score": 6,
+      "crowd_density": 5,
+      "incident_history": 3,
+      "congestion_level": 6,
+      "road_name": "BTM Ring Road"
+    },
+    {
+      "from": "Silk_Board",
+      "to": "HSR_Layout",
+      "travel_time": 11,
+      "distance": 3.4,
+      "lighting_score": 7,
+      "crowd_density": 5,
+      "incident_history": 2,
+      "congestion_level": 5,
+      "road_name": "Agara Lake Road"
+    },
+    {
+      "from": "BTM_Layout",
+      "to": "HSR_Layout",
+      "travel_time": 9,
+      "distance": 2.9,
+      "lighting_score": 8,
+      "crowd_density": 4,
+      "incident_history": 1,
+      "congestion_level": 3,
+      "road_name": "HSR 27th Main"
+    },
+    {
+      "from": "Silk_Board",
+      "to": "Electronic_City",
+      "travel_time": 20,
+      "distance": 6.5,
+      "lighting_score": 5,
+      "crowd_density": 3,
+      "incident_history": 8,
+      "congestion_level": 7,
+      "road_name": "Hosur Road Flyover"
+    },
+    {
+      "from": "HSR_Layout",
+      "to": "Electronic_City",
+      "travel_time": 25,
+      "distance": 8,
+      "lighting_score": 6,
+      "crowd_density": 3,
+      "incident_history": 4,
+      "congestion_level": 4,
+      "road_name": "Neeladri Road"
+    },
+    {
+      "from": "Marathahalli",
+      "to": "Whitefield",
+      "travel_time": 18,
+      "distance": 5.8,
+      "lighting_score": 7,
+      "crowd_density": 5,
+      "incident_history": 3,
+      "congestion_level": 6,
+      "road_name": "Whitefield Main Road"
+    },
+    {
+      "from": "Indiranagar",
+      "to": "Domlur",
+      "travel_time": 6,
+      "distance": 1.8,
+      "lighting_score": 8,
+      "crowd_density": 6,
+      "incident_history": 2,
+      "congestion_level": 4,
+      "road_name": "Indiranagar 100ft Road"
+    },
+    {
+      "from": "Koramangala",
+      "to": "HSR_Layout",
+      "travel_time": 13,
+      "distance": 4.1,
+      "lighting_score": 4,
+      "crowd_density": 3,
+      "incident_history": 9,
+      "congestion_level": 4,
+      "road_name": "Dark Lane Shortcut"
+    }
+  ]
+}
